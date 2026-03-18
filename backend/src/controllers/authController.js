@@ -2,8 +2,8 @@ import { prisma } from "../database/client.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-// Rota de Cadastro (Register)
-export const register = async (req, res) => {
+// Rota de Cadastro
+export const cadastro = async (req, res) => {
   try {
     const { name, email, ra, password } = req.body;
 
