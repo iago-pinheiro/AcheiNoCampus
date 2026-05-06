@@ -1,0 +1,30 @@
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+}
+
+.status-tag--found {
+  background-color: #E0E7FF;
+  color: var(--color-primary-blue);
+}
+
+.status-tag--claimed {
+  background-color: #D1FAE5;
+  color: var(--color-soft-green);
+}
+
+.status-tag--pending {
+  background-color: #FFEDD5;
+  color: var(--color-bright-orange);
+}
+
+.status-tag--resolved {
+  background-color: #DBEAFE;
+  color: var(--color-deep-blue);
+}
