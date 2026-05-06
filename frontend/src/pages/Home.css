@@ -75,12 +75,12 @@
   letter-spacing: 0.04em;
 }
 
-.item-card__badge--achado {
+.item-card__badge--found {
   background-color: #dcfce7;
   color: #166534;
 }
 
-.item-card__badge--perdido {
+.item-card__badge--lost {
   background-color: #fee2e2;
   color: #991b1b;
 }
