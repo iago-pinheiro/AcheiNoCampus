@@ -19,8 +19,8 @@ export function Header() {
     <header className="header">
       <div className="header__inner">
         <Link to="/" className="header__logo">
-          <img src={logoTitle} alt="Achei no Campus" className="logo-desktop" />
-          <img src={logoMobile} alt="Achei no Campus" className="logo-mobile" />
+          <img src={logoMobile} alt="Ícone" className="header__logo-img" />
+          <span className="header__logo-text">Achei no Campus</span>
         </Link>
 
         <nav className="header__nav" aria-label="Navegação principal">
