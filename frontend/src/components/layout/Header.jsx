@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import logoImg from '../../assets/logo_no_bg_1.png';
+import logoTitle from '../../assets/logo_title.png';
+import logoMobile from '../../assets/logo_mobile.png';
 import './Header.css';
 
 export function Header() {
@@ -15,7 +16,8 @@ export function Header() {
     <header className="header">
       <div className="header__inner">
         <Link to="/" className="header__logo">
-          <img src={logoImg} alt="Achei no Campus" style={{ height: '40px', width: 'auto' }} />
+          <img src={logoTitle} alt="Achei no Campus" className="logo-desktop" />
+          <img src={logoMobile} alt="Achei no Campus" className="logo-mobile" />
         </Link>
 
         <nav className="header__nav" aria-label="Navegação principal">
