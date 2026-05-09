@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { SearchBar } from '../components/ui/SearchBar';
+import { CardItem } from '../components/ui/CardItem';
+import { ReportItemButton } from '../components/ui/ActionButtons';
 import './Home.css';
 
 export function Home() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchItems() {
@@ -26,40 +31,64 @@ export function Home() {
     fetchItems();
   }, []);
 
+  const filteredItems = items.filter(item => 
+    item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.location.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <section className="home">
       <div className="home__hero">
-        <h1 className="home__title">Itens perdidos e achados no campus</h1>
-        <p className="home__subtitle">Encontre ou registre itens perdidos na sua universidade.</p>
-        <Link to="/postar" className="home__cta">
-          Postar item
-        </Link>
+        <h1 className="home__title">Achei no Campus</h1>
+        <p className="home__subtitle">A plataforma de achados e perdidos confiável da sua universidade.</p>
+        
+        <div className="home__search-container">
+          <SearchBar 
+            placeholder="Encontre o seu item perdido..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onAddClick={() => navigate('/postar')}
+          />
+        </div>
       </div>
 
       <div className="home__feed">
-        <h2 className="home__section-title">Publicações recentes</h2>
+        <div className="home__feed-header">
+          <h2 className="home__section-title">Publicações recentes</h2>
+          <ReportItemButton onClick={() => navigate('/postar')} className="home__report-btn-mobile" />
+        </div>
         
-        {loading && <p>Carregando itens...</p>}
-        {error && <p className="error-message">{error}</p>}
+        {loading && <p className="home__status-msg">Carregando itens...</p>}
+        {error && <p className="home__status-msg error-message">{error}</p>}
         
-        {!loading && !error && items.length === 0 && (
-          <p>Nenhum item encontrado no momento.</p>
+        {!loading && !error && filteredItems.length === 0 && (
+          <p className="home__status-msg">Nenhum item encontrado no momento.</p>
         )}
 
-        {!loading && !error && items.length > 0 && (
-          <ul className="home__list" aria-label="Lista de itens recentes">
-            {items.map((item) => (
-              <li key={item.id} className="home__list-item">
-                <Link to={`/item/${item.id}`} className="item-card">
-                  <span className={`item-card__badge item-card__badge--${item.status.toLowerCase()}`}>
-                    {item.status === 'FOUND' ? 'Achado' : 'Perdido'}
-                  </span>
-                  <h3 className="item-card__title">{item.title}</h3>
-                  <p className="item-card__location">📍 {item.location}</p>
+        {!loading && !error && filteredItems.length > 0 && (
+          <div className="home__grid">
+            {filteredItems.map((item) => {
+              // Convert API status to design system status
+              const statusMap = {
+                'FOUND': 'found',
+                'LOST': 'pending',
+                'RESOLVED': 'resolved'
+              };
+              const dsStatus = statusMap[item.status] || 'pending';
+
+              return (
+                <Link to={`/item/${item.id}`} key={item.id} className="home__card-link">
+                  <CardItem 
+                    title={item.title}
+                    location={item.location}
+                    date={new Date(item.createdAt).toLocaleDateString('pt-BR')}
+                    status={dsStatus}
+                    imageUrl={item.imageUrl}
+                  />
                 </Link>
-              </li>
-            ))}
-          </ul>
+              );
+            })}
+          </div>
         )}
       </div>
     </section>
