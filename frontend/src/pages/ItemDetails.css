@@ -111,3 +111,5 @@
   color: #6b7280;
   margin: 2rem 0;
 }
+
+.item-details__icon { margin-right: 0.5rem; color: var(--color-primary-blue); vertical-align: middle; }

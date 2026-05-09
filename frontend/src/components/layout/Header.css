@@ -24,14 +24,18 @@
 
 .logo-desktop {
   display: none;
-  height: 36px;
+  height: 56px; /* Matches header height */
   width: auto;
+  transform: scale(2.8);
+  transform-origin: left center;
 }
 
 .logo-mobile {
   display: block;
-  height: 36px;
+  height: 56px; /* Matches header height */
   width: auto;
+  transform: scale(2.5);
+  transform-origin: left center;
 }
 
 @media (min-width: 640px) {

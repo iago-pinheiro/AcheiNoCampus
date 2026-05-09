@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { MapPin, Tag, User, Calendar } from 'lucide-react';
+import { StatusTag } from '../components/ui/StatusTag';
 import './ItemDetails.css';
 
 export function ItemDetails() {
@@ -53,30 +55,28 @@ export function ItemDetails() {
       <Link to="/" className="item-details__back">← Voltar</Link>
 
       <div className="item-details__card">
-        <span className={`item-details__badge item-details__badge--${item.status.toLowerCase()}`}>
-          {item.status === 'FOUND' ? 'Achado' : 'Perdido'}
-        </span>
+        <StatusTag status={item.status === 'FOUND' ? 'found' : 'pending'} />
         <h1 className="item-details__title">{item.title}</h1>
 
         <dl className="item-details__meta">
           <div className="item-details__meta-row">
-            <dt>📍 Local</dt>
+            <dt><MapPin size={16} className="item-details__icon" /> Local</dt>
             <dd>{item.location}</dd>
           </div>
           {item.category && (
             <div className="item-details__meta-row">
-              <dt>🏷️ Categoria</dt>
+              <dt><Tag size={16} className="item-details__icon" /> Categoria</dt>
               <dd>{item.category.name}</dd>
             </div>
           )}
           {item.author && (
             <div className="item-details__meta-row">
-              <dt>👤 Postado por</dt>
+              <dt><User size={16} className="item-details__icon" /> Postado por</dt>
               <dd>{item.author.name}</dd>
             </div>
           )}
           <div className="item-details__meta-row">
-            <dt>📅 Data</dt>
+            <dt><Calendar size={16} className="item-details__icon" /> Data</dt>
             <dd>{new Date(item.createdAt).toLocaleDateString('pt-BR')}</dd>
           </div>
         </dl>

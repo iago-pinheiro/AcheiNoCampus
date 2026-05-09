@@ -1,4 +1,4 @@
-import { MapPin, Calendar } from 'lucide-react';
+import { MapPin, Calendar, Image as ImageIcon } from 'lucide-react';
 import { StatusTag } from './StatusTag';
 import './CardItem.css';
 
@@ -19,7 +19,9 @@ export function CardItem({
         {imageUrl ? (
           <img src={imageUrl} alt={title} className="card-item__image" />
         ) : (
-          <div className="card-item__placeholder-image">📷</div>
+          <div className="card-item__placeholder-image">
+            <ImageIcon size={32} />
+          </div>
         )}
       </div>
       
