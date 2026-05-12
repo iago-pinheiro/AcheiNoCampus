@@ -11,12 +11,12 @@ export function ReportItemButton({ onClick, className = '' }) {
   return (
     <Button 
       variant="primary" 
-      icon={<CheckCircle2 size={18} color="#109981" fill="white" />} 
+      icon={<CheckCircle2 size={18} />} 
       onClick={onClick}
       className={className}
       fullWidth
     >
-      Report Item
+      Reportar Item
     </Button>
   );
 }

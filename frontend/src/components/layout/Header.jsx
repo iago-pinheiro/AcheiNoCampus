@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { LogOut } from 'lucide-react';
-import logoSideText from '../../assets/logo_side_text.png';
+import logoSideText from '../../assets/logo_side_text_nav.png';
 import './Header.css';
 
 export function Header() {

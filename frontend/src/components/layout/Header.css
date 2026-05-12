@@ -5,7 +5,7 @@
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border-light);
   backdrop-filter: blur(12px);
-  background-color: rgba(255, 255, 255, 0.92);
+  background-color: rgba(255, 255, 255, 0.95);
 }
 
 .header__inner {
@@ -14,8 +14,8 @@
   justify-content: space-between;
   max-width: 1024px;
   margin: 0 auto;
-  padding: 0.625rem 1rem;
-  height: 56px;
+  padding: 0.5rem 0.75rem;
+  height: 60px;
 }
 
 .header__logo {
@@ -36,15 +36,16 @@
 }
 
 .header__login-btn {
-  padding: 0.5rem 1.125rem;
-  border-radius: var(--radius-full);
-  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--color-surface);
   text-decoration: none;
   background: var(--gradient-primary);
   box-shadow: var(--shadow-sm);
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .header__login-btn:hover {
@@ -60,8 +61,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: var(--gradient-primary);
   border-radius: 50%;
@@ -81,13 +82,29 @@
 
 .header__user-avatar {
   color: #fff;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 700;
   font-family: var(--font-title);
 }
 
-@media (max-width: 480px) {
+/* Desktop */
+@media (min-width: 640px) {
+  .header__inner {
+    padding: 0.625rem 1rem;
+    height: 68px;
+  }
+  
   .header__logo-img {
-    height: 32px;
+    height: 48px;
+  }
+  
+  .header__login-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+  }
+  
+  .header__user-btn {
+    width: 40px;
+    height: 40px;
   }
 }
