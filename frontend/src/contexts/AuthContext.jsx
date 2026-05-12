@@ -1,9 +1,12 @@
+import React, { useState, useEffect, createContext, useContext } from 'react';
+
+const AuthContext = createContext();
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Inicializa o estado com base no localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem('@AcheiNoCampus:token');
     const storedUser = localStorage.getItem('@AcheiNoCampus:user');
@@ -32,7 +35,6 @@ export function AuthProvider({ children }) {
         throw new Error(data.error || 'Erro ao fazer login');
       }
 
-      // Salvar no estado e localStorage
       setUser(data.user);
       setToken(data.token);
       
@@ -61,9 +63,6 @@ export function AuthProvider({ children }) {
         throw new Error(data.error || 'Erro ao fazer cadastro');
       }
 
-      // Após cadastro bem-sucedido, o backend no AcheiNoCampus retorna o user mas não o token.
-      // O usuário terá que fazer login ou podemos logar automaticamente.
-      // Retornaremos success para redirecionar o usuário para tela de login.
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
