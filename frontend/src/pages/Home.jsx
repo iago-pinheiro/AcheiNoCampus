@@ -33,11 +33,6 @@ export function Home() {
       {/* Hero Section */}
       <section className="home__hero">
         <div className="home__hero-content">
-          <span className="home__badge">
-            <Shield size={14} />
-            Plataforma Universitária
-          </span>
-          
           <h1 className="home__title">
             Encontre seus objetos <span className="home__title-highlight">perdidos no campus</span>
           </h1>
