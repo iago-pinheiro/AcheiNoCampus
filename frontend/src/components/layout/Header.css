@@ -30,9 +30,9 @@
 }
 
 .header__logo-img {
-  height: 80px;
-  width: auto;
-  object-fit: contain;
+  width: 160px !important;
+  height: auto !important;
+  max-width: none;
 }
 
 .header__login-btn {
@@ -124,7 +124,8 @@
   }
   
   .header__logo-img {
-    height: 90px;
+    width: 200px !important;
+    height: auto !important;
   }
   
   .header__login-btn {

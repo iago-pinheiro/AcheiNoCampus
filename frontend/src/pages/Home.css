@@ -334,9 +334,8 @@
 }
 
 .home__footer-logo img {
-  height: 28px;
-  margin-bottom: 0.5rem;
-}
+    width: 180px !important;
+  }
 
 .home__footer-text {
   font-size: 0.8125rem;
