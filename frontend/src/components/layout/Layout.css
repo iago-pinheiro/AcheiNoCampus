@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f9fafb;
+  padding-bottom: 72px;
 }
 
 .main-container {
@@ -10,5 +10,15 @@
   width: 100%;
   max-width: 768px;
   margin: 0 auto;
-  padding: 1.5rem 1rem;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .app-shell {
+    padding-bottom: 0;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
 }
