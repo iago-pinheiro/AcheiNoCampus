@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SearchBar } from '../components/ui/SearchBar';
 import { CardItem } from '../components/ui/CardItem';
 import { ReportItemButton } from '../components/ui/ActionButtons';
+import { itemsApi } from '../services/api';
 import './Home.css';
 
 export function Home() {
@@ -15,11 +16,7 @@ export function Home() {
   useEffect(() => {
     async function fetchItems() {
       try {
-        const response = await fetch('http://localhost:3000/api/items');
-        if (!response.ok) {
-          throw new Error('Falha ao carregar os itens');
-        }
-        const data = await response.json();
+        const data = await itemsApi.getAll();
         setItems(data);
       } catch (err) {
         setError(err.message);
