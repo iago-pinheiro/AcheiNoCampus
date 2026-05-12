@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Search, PlusCircle, Shield, Clock, Users, ArrowRight, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { PlusCircle, Clock, Shield, Users, ArrowRight } from 'lucide-react';
 import { itemsApi } from '../services/api';
 import { CardItem } from '../components/ui/CardItem';
-import logoSideText from '../assets/logo_side_text_nav.png';
 import './Home.css';
 
 export function Home() {
-  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     async function fetchItems() {
@@ -38,7 +35,7 @@ export function Home() {
           </h1>
           
           <p className="home__subtitle">
-            Conectamos estudantes que perderam itens com quem encontrou. 
+            Conectamos estudantes que perderam itens com quem encontrou.
             Rápido, simples e seguro.
           </p>
           
@@ -51,11 +48,6 @@ export function Home() {
               Entrar
             </Link>
           </div>
-          
-          <div className="home__trust">
-            <CheckCircle size={16} />
-            <span>+500 itens recuperados este semestre</span>
-          </div>
         </div>
       </section>
 
@@ -64,7 +56,7 @@ export function Home() {
         <div className="home__features-grid">
           <div className="home__feature">
             <div className="home__feature-icon">
-              <Clock size={22} />
+              <Clock size={20} />
             </div>
             <div className="home__feature-content">
               <h3>Rápido</h3>
@@ -74,7 +66,7 @@ export function Home() {
           
           <div className="home__feature">
             <div className="home__feature-icon">
-              <Shield size={22} />
+              <Shield size={20} />
             </div>
             <div className="home__feature-content">
               <h3>Seguro</h3>
@@ -84,7 +76,7 @@ export function Home() {
           
           <div className="home__feature">
             <div className="home__feature-icon">
-              <Users size={22} />
+              <Users size={20} />
             </div>
             <div className="home__feature-content">
               <h3>Comunidade</h3>
@@ -103,7 +95,7 @@ export function Home() {
             <span className="home__step-number">1</span>
             <div className="home__step-content">
               <h3>Perdeu um item?</h3>
-              <p>Post rapidement avec les détails</p>
+              <p>Post com os detalhes</p>
             </div>
           </div>
           
@@ -118,14 +110,14 @@ export function Home() {
           <div className="home__step">
             <span className="home__step-number">3</span>
             <div className="home__step-content">
-              <h3>Reunião</h3>
-              <p>Combine a retirada no campus</p>
+              <h3>Combine a retirada</h3>
+              <p>No campus, de forma segura</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Recent Items (Optional - collapsible) */}
+      {/* Recent Items */}
       {recentItems.length > 0 && (
         <section className="home__feed">
           <h2 className="home__section-title">Itens recentes</h2>
@@ -152,22 +144,12 @@ export function Home() {
 
       {/* Final CTA */}
       <section className="home__cta">
-        <div className="home__cta-content">
-          <h2>Comece agora mesmo</h2>
-          <p>Junte-se à comunidade e ajude a encontrar objetos perdidos</p>
-          <Link to="/cadastro" className="home__cta-btn">
-            Criar conta grátis
-          </Link>
-        </div>
+        <h2>Comece agora mesmo</h2>
+        <p>Junte-se à comunidade e ajude a encontrar objetos perdidos</p>
+        <Link to="/cadastro" className="home__cta-btn">
+          Criar conta grátis
+        </Link>
       </section>
-
-      {/* Footer */}
-      <footer className="home__footer">
-        <div className="home__footer-logo">
-          <img src={logoSideText} alt="Achei no Campus" />
-        </div>
-        <p className="home__footer-text">© 2026 Achei no Campus. Todos os direitos reservados.</p>
-      </footer>
     </div>
   );
 }
