@@ -1,19 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { PlusCircle, Clock, Shield, Users, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { PlusCircle, Clock, Shield, Users, ArrowRight, Eye } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import { itemsApi } from '../services/api';
 import { CardItem } from '../components/ui/CardItem';
 import './Home.css';
 
 export function Home() {
+  const navigate = useNavigate();
+  const { signed } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     async function fetchItems() {
       try {
         const data = await itemsApi.getAll();
-        setItems(data.slice(0, 6));
+        setItems(data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -23,7 +27,8 @@ export function Home() {
     fetchItems();
   }, []);
 
-  const recentItems = items.slice(0, 4);
+  const displayedItems = showAll ? items : items.slice(0, 4);
+  const hasMoreItems = items.length > 4 && !showAll;
 
   return (
     <div className="home">
@@ -118,12 +123,12 @@ export function Home() {
       </section>
 
       {/* Recent Items */}
-      {recentItems.length > 0 && (
+      {items.length > 0 && (
         <section className="home__feed">
-          <h2 className="home__section-title">Itens recentes</h2>
+          <h2 className="home__section-title">{showAll ? 'Todos os itens' : 'Itens recentes'}</h2>
           
           <div className="home__grid">
-            {recentItems.map((item) => (
+            {displayedItems.map((item) => (
               <Link to={`/item/${item.id}`} key={item.id} className="home__card-link">
                 <CardItem 
                   title={item.title}
@@ -136,9 +141,24 @@ export function Home() {
             ))}
           </div>
           
-          <Link to="/login" className="home__see-all">
-            Ver todos os itens <ArrowRight size={16} />
-          </Link>
+          {hasMoreItems && (
+            <div className="home__see-all-wrapper">
+              <button 
+                onClick={() => {
+                  if (signed) {
+                    setShowAll(true);
+                  } else {
+                    navigate('/login');
+                  }
+                }} 
+                className="home__see-all"
+              >
+                <Eye size={16} />
+                Ver todos os itens
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          )}
         </section>
       )}
 
