@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { LogOut, Search } from 'lucide-react';
+import { LogOut, LayoutGrid } from 'lucide-react';
 import logoSideText from '../../assets/logo_side_text_nav.png';
 import './Header.css';
 
@@ -26,8 +26,8 @@ export function Header() {
             to="/itens" 
             className={`header__nav-link ${location.pathname === '/itens' ? 'header__nav-link--active' : ''}`}
           >
-            <Search size={16} />
-            <span>Explorar</span>
+            <LayoutGrid size={16} strokeWidth={2} />
+            Explorar
           </Link>
         </div>
 
@@ -39,7 +39,7 @@ export function Header() {
               </span>
             </Link>
             <button onClick={handleLogout} className="header__logout-btn" aria-label="Sair">
-              <LogOut size={18} />
+              <LogOut size={18} strokeWidth={2} />
             </button>
           </div>
         ) : (

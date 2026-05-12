@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, PlusCircle, User, LogIn } from 'lucide-react';
+import { Home, LayoutGrid, PlusCircle, User, LogIn } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import './BottomNav.css';
 
@@ -8,6 +8,7 @@ export function BottomNav() {
   const { signed } = useAuth();
 
   const isActive = (path) => location.pathname === path;
+  const sw = (active) => active ? 2.5 : 2;
 
   return (
     <nav className="bottom-nav" aria-label="Navegação principal">
@@ -15,7 +16,7 @@ export function BottomNav() {
         to="/" 
         className={`bottom-nav__item ${isActive('/') ? 'bottom-nav__item--active' : ''}`}
       >
-        <Home size={24} strokeWidth={isActive('/') ? 2.5 : 2} />
+        <Home size={24} strokeWidth={sw(isActive('/'))} />
         <span className="bottom-nav__label">Início</span>
       </Link>
 
@@ -23,7 +24,7 @@ export function BottomNav() {
         to="/itens" 
         className={`bottom-nav__item ${isActive('/itens') ? 'bottom-nav__item--active' : ''}`}
       >
-        <Search size={24} strokeWidth={isActive('/itens') ? 2.5 : 2} />
+        <LayoutGrid size={24} strokeWidth={sw(isActive('/itens'))} />
         <span className="bottom-nav__label">Explorar</span>
       </Link>
 
@@ -40,7 +41,7 @@ export function BottomNav() {
           to="/perfil" 
           className={`bottom-nav__item ${isActive('/perfil') ? 'bottom-nav__item--active' : ''}`}
         >
-          <User size={24} strokeWidth={isActive('/perfil') ? 2.5 : 2} />
+          <User size={24} strokeWidth={sw(isActive('/perfil'))} />
           <span className="bottom-nav__label">Perfil</span>
         </Link>
       ) : (
@@ -48,7 +49,7 @@ export function BottomNav() {
           to="/login" 
           className={`bottom-nav__item ${isActive('/login') || isActive('/cadastro') ? 'bottom-nav__item--active' : ''}`}
         >
-          <LogIn size={24} strokeWidth={2} />
+          <LogIn size={24} strokeWidth={sw(isActive('/login') || isActive('/cadastro'))} />
           <span className="bottom-nav__label">Entrar</span>
         </Link>
       )}
