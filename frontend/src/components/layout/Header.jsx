@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { LogOut, User } from 'lucide-react';
-import logoMobile from '../../assets/logo_mobile.png';
+import { LogOut } from 'lucide-react';
+import logoSideText from '../../assets/logo_side_text.png';
 import './Header.css';
 
 export function Header() {
@@ -17,8 +17,7 @@ export function Header() {
     <header className="header">
       <div className="header__inner">
         <Link to="/" className="header__logo">
-          <img src={logoMobile} alt="Achei no Campus" className="header__logo-img" />
-          <span className="header__logo-text">Achei no Campus</span>
+          <img src={logoSideText} alt="Achei no Campus" className="header__logo-img" />
         </Link>
 
         {signed ? (
