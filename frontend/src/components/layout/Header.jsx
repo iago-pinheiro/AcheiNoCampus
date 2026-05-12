@@ -21,11 +21,16 @@ export function Header() {
         </Link>
 
         {signed ? (
-          <button onClick={handleLogout} className="header__user-btn" aria-label="Sair">
-            <span className="header__user-avatar">
-              {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-            </span>
-          </button>
+          <div className="header__user-actions">
+            <Link to="/perfil" className="header__user-btn" aria-label="Perfil">
+              <span className="header__user-avatar">
+                {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+              </span>
+            </Link>
+            <button onClick={handleLogout} className="header__logout-btn" aria-label="Sair">
+              <LogOut size={18} />
+            </button>
+          </div>
         ) : (
           <Link to="/login" className="header__login-btn">
             Entrar

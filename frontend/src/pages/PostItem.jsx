@@ -21,12 +21,23 @@ const LOCATIONS = [
   'Outro',
 ];
 
+const DEFAULT_CATEGORIES = [
+  { id: 'default-electronics', name: 'Eletrônicos' },
+  { id: 'default-accessories', name: 'Acessórios' },
+  { id: 'default-documents', name: 'Documentos' },
+  { id: 'default-keys', name: 'Chaves' },
+  { id: 'default-clothing', name: 'Roupas' },
+  { id: 'default-books', name: 'Livros/Materiais' },
+  { id: 'default-personal', name: 'Objetos Pessoais' },
+  { id: 'default-other', name: 'Outros' },
+];
+
 export function PostItem() {
   const navigate = useNavigate();
   const { token } = useAuth();
 
-  const [categories, setCategories] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const [categoriesError, setCategoriesError] = useState('');
 
   const [form, setForm] = useState({
@@ -46,9 +57,12 @@ export function PostItem() {
     async function fetchCategories() {
       try {
         const data = await categoriesApi.getAll();
-        setCategories(data);
+        if (data && data.length > 0) {
+          setCategories(data);
+        }
       } catch {
-        setCategoriesError('Não foi possível carregar as categorias. Tente novamente.');
+        // Silently use default categories if API fails
+        console.log('Usando categorias padrão');
       } finally {
         setLoadingCategories(false);
       }
