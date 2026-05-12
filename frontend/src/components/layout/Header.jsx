@@ -1,10 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { LogOut } from 'lucide-react';
+import { LogOut, Search } from 'lucide-react';
 import logoSideText from '../../assets/logo_side_text_nav.png';
 import './Header.css';
 
 export function Header() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { signed, logout, user } = useAuth();
 
@@ -16,9 +17,19 @@ export function Header() {
   return (
     <header className="header">
       <div className="header__inner">
-        <Link to="/" className="header__logo">
-          <img src={logoSideText} alt="Achei no Campus" className="header__logo-img" />
-        </Link>
+        <div className="header__left">
+          <Link to="/" className="header__logo">
+            <img src={logoSideText} alt="Achei no Campus" className="header__logo-img" />
+          </Link>
+
+          <Link 
+            to="/itens" 
+            className={`header__nav-link ${location.pathname === '/itens' ? 'header__nav-link--active' : ''}`}
+          >
+            <Search size={16} />
+            <span>Explorar</span>
+          </Link>
+        </div>
 
         {signed ? (
           <div className="header__user-actions">

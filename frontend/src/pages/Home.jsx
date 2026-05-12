@@ -118,11 +118,13 @@ export function Home() {
         </div>
       </section>
 
-      {/* Recent Items */}
-      {recentItems.length > 0 && (
-        <section className="home__feed">
-          <h2 className="home__section-title">Itens recentes</h2>
-          
+      {/* Recent Items / Explorar */}
+      <section className="home__feed">
+        <h2 className="home__section-title">
+          {recentItems.length > 0 ? 'Itens recentes' : 'Todos os itens'}
+        </h2>
+        
+        {recentItems.length > 0 ? (
           <div className="home__grid">
             {recentItems.map((item) => (
               <Link to={`/item/${item.id}`} key={item.id} className="home__card-link">
@@ -136,18 +138,20 @@ export function Home() {
               </Link>
             ))}
           </div>
-          
-          {hasMoreItems && (
-            <div className="home__see-all-wrapper">
-              <Link to="/itens" className="home__see-all">
-                <Eye size={16} />
-                Ver todos os itens
-                <ArrowRight size={16} />
-              </Link>
-            </div>
-          )}
-        </section>
-      )}
+        ) : (
+          !loading && (
+            <p className="home__empty-msg">Nenhum item registrado ainda.</p>
+          )
+        )}
+        
+        <div className="home__see-all-wrapper">
+          <Link to="/itens" className="home__see-all">
+            <Eye size={16} />
+            Explorar todos os itens
+            <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
 
       {/* Final CTA */}
       <section className="home__cta">
