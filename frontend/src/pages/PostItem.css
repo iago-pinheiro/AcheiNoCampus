@@ -1,20 +1,21 @@
 .post-item {
-  padding: 1.25rem 1rem;
+  padding: 1.5rem 1rem;
   max-width: 480px;
   margin: 0 auto;
 }
 
 .post-item__title {
+  font-family: var(--font-title);
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-text-main);
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.5rem;
 }
 
 .post-item__subtitle {
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
   color: var(--color-text-muted);
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.5rem;
 }
 
 .post-item__alert {

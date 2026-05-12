@@ -1,30 +1,36 @@
 .status-tag {
   display: inline-flex;
   align-items: center;
+  gap: 0.25rem;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.75rem;
+  font-size: 0.6875rem;
+  padding: 0.3125rem 0.75rem;
   border-radius: var(--radius-full);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .status-tag--found {
-  background-color: #E0E7FF;
+  background-color: var(--color-primary-light);
   color: var(--color-primary-blue);
+  border: 1px solid rgba(37, 83, 235, 0.2);
 }
 
 .status-tag--claimed {
-  background-color: #D1FAE5;
+  background-color: var(--color-green-light);
   color: var(--color-soft-green);
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .status-tag--pending {
-  background-color: #FFEDD5;
+  background-color: var(--color-orange-light);
   color: var(--color-bright-orange);
+  border: 1px solid rgba(249, 115, 22, 0.2);
 }
 
 .status-tag--resolved {
-  background-color: #DBEAFE;
-  color: var(--color-deep-blue);
+  background-color: var(--color-purple-light);
+  color: var(--color-vibrant-purple);
+  border: 1px solid rgba(139, 92, 246, 0.2);
 }
