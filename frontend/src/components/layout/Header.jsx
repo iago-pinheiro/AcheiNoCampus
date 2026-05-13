@@ -27,7 +27,7 @@ export function Header() {
             className={`header__nav-link ${location.pathname === '/itens' ? 'header__nav-link--active' : ''}`}
           >
             <LayoutGrid size={16} strokeWidth={2} />
-            Explorar
+            <span className="header__nav-link-text">Explorar</span>
           </Link>
         </div>
 
