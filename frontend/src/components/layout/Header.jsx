@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { LogOut, LayoutGrid } from 'lucide-react';
+import { LogOut, LayoutGrid, PlusCircle, Home } from 'lucide-react';
 import logoSideText from '../../assets/logo_side_text_nav.png';
 import './Header.css';
 
@@ -14,21 +14,34 @@ export function Header() {
     navigate('/login');
   };
 
+  const navLink = (to, label, icon) => {
+    const active = location.pathname === to;
+    return (
+      <Link 
+        to={to} 
+        className={`header__nav-link ${active ? 'header__nav-link--active' : ''}`}
+      >
+        {icon}
+        <span className={`header__nav-link-text ${active ? 'header__nav-link-text--active' : ''}`}>
+          {label}
+        </span>
+      </Link>
+    );
+  };
+
   return (
     <header className="header">
       <div className="header__inner">
         <div className="header__left">
-          <Link to="/" className="header__logo">
+          <Link to="/" className="header__logo" aria-label="Início">
             <img src={logoSideText} alt="Achei no Campus" className="header__logo-img" />
           </Link>
 
-          <Link 
-            to="/itens" 
-            className={`header__nav-link ${location.pathname === '/itens' ? 'header__nav-link--active' : ''}`}
-          >
-            <LayoutGrid size={16} strokeWidth={2} />
-            <span className="header__nav-link-text">Explorar</span>
-          </Link>
+          <nav className="header__nav" aria-label="Navegação">
+            {navLink('/', 'Início', <Home size={16} strokeWidth={2} />)}
+            {navLink('/itens', 'Explorar', <LayoutGrid size={16} strokeWidth={2} />)}
+            {signed && navLink('/postar', 'Postar', <PlusCircle size={16} strokeWidth={2} />)}
+          </nav>
         </div>
 
         {signed ? (
