@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { User, Mail, Hash, Package, PlusCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { User, Mail, Hash, Package, PlusCircle, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { itemsApi } from '../services/api';
 import { CardItem } from '../components/ui/CardItem';
 import './Profile.css';
 
 export function Profile() {
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,6 +30,11 @@ export function Profile() {
       fetchUserItems();
     }
   }, [user?.id]);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   if (!user) {
     return (
@@ -68,6 +74,10 @@ export function Profile() {
           <PlusCircle size={18} />
           Postar novo item
         </Link>
+        <button onClick={handleLogout} className="profile__action-btn profile__action-btn--danger">
+          <LogOut size={18} />
+          Sair da conta
+        </button>
       </div>
 
       <div className="profile__items">
