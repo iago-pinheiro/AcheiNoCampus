@@ -1,44 +1,48 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Tag, FileText, Image, AlertCircle, CheckCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  MapPin, Tag, FileText, Image, AlertCircle,
+  CheckCircle, ChevronLeft
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { categoriesApi, itemsApi } from '../services/api';
+import { itemsApi } from '../services/api';
+import { Button } from '../components/ui/Button';
 import './PostItem.css';
 
 const STATUS_OPTIONS = [
-  { value: 'LOST', label: 'Perdido' },
-  { value: 'FOUND', label: 'Encontrado' },
+  { value: 'LOST', label: 'Perdido', desc: 'Você perdeu este item' },
+  { value: 'FOUND', label: 'Encontrado', desc: 'Você encontrou este item' },
 ];
 
 const LOCATIONS = [
   'Biblioteca Central',
   'Bloco A',
   'Bloco B',
+  'Bloco C',
   'Cantina',
   'Estacionamento',
   'Laboratório',
   'Auditório',
+  'Restaurante Universitário',
+  'Área Esportiva',
   'Outro',
 ];
 
-const DEFAULT_CATEGORIES = [
-  { id: 'default-electronics', name: 'Eletrônicos' },
-  { id: 'default-accessories', name: 'Acessórios' },
-  { id: 'default-documents', name: 'Documentos' },
-  { id: 'default-keys', name: 'Chaves' },
-  { id: 'default-clothing', name: 'Roupas' },
-  { id: 'default-books', name: 'Livros/Materiais' },
-  { id: 'default-personal', name: 'Objetos Pessoais' },
-  { id: 'default-other', name: 'Outros' },
+const CATEGORIES = [
+  { id: 'eletronicos', name: 'Eletrônicos' },
+  { id: 'acessorios', name: 'Acessórios' },
+  { id: 'documentos', name: 'Documentos' },
+  { id: 'chaves', name: 'Chaves' },
+  { id: 'roupas', name: 'Roupas' },
+  { id: 'livros', name: 'Livros/Materiais' },
+  { id: 'pessoais', name: 'Objetos Pessoais' },
+  { id: 'outros', name: 'Outros' },
 ];
 
 export function PostItem() {
   const navigate = useNavigate();
   const { token } = useAuth();
-
-  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
-  const [loadingCategories, setLoadingCategories] = useState(false);
-  const [categoriesError, setCategoriesError] = useState('');
 
   const [form, setForm] = useState({
     title: '',
@@ -49,27 +53,10 @@ export function PostItem() {
     imageUrl: '',
   });
 
+  const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const data = await categoriesApi.getAll();
-        if (data && data.length > 0) {
-          setCategories(data);
-        }
-      } catch {
-        // Silently use default categories if API fails
-        console.log('Usando categorias padrão');
-      } finally {
-        setLoadingCategories(false);
-      }
-    }
-
-    fetchCategories();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -79,20 +66,17 @@ export function PostItem() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError('');
-    setSubmitSuccess(false);
 
     if (!form.title || !form.status || !form.categoryId || !form.location) {
       setSubmitError('Preencha todos os campos obrigatórios.');
       return;
     }
-
     if (!token) {
       setSubmitError('Você precisa estar logado para postar um item.');
       return;
     }
 
     setIsSubmitting(true);
-
     try {
       await itemsApi.create({
         title: form.title,
@@ -102,12 +86,8 @@ export function PostItem() {
         location: form.location,
         imageUrl: form.imageUrl || null,
       });
-
       setSubmitSuccess(true);
-
-      setTimeout(() => {
-        navigate('/');
-      }, 1500);
+      setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       setSubmitError(err.message || 'Erro ao publicar o item. Tente novamente.');
     } finally {
@@ -116,168 +96,214 @@ export function PostItem() {
   };
 
   return (
-    <section className="post-item">
-      <h1 className="post-item__title">Postar item</h1>
-      <p className="post-item__subtitle">
-        Preencha os dados para registrar um item perdido ou encontrado.
+    <motion.div
+      className="post"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="post__header">
+        {step > 1 ? (
+          <button type="button" className="post__back" onClick={() => setStep(step - 1)}>
+            <ChevronLeft size={22} />
+          </button>
+        ) : (
+          <div />
+        )}
+        <div className="post__steps">
+          <span className={`post__step-dot ${step >= 1 ? 'post__step-dot--active' : ''}`} />
+          <span className={`post__step-line ${step >= 2 ? 'post__step-line--active' : ''}`} />
+          <span className={`post__step-dot ${step >= 2 ? 'post__step-dot--active' : ''}`} />
+        </div>
+        <div />
+      </div>
+
+      <h1 className="post__title">Publicar Item</h1>
+      <p className="post__subtitle">
+        {step === 1 ? 'Primeiro, conte o que aconteceu' : 'Agora, descreva o item'}
       </p>
 
       {submitSuccess && (
-        <div className="post-item__alert post-item__alert--success">
+        <motion.div
+          className="post__alert post__alert--success"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
           <CheckCircle size={18} />
-          Item publicado com sucesso! Redirecionando...
-        </div>
+          Item publicado com sucesso!
+        </motion.div>
       )}
 
       {submitError && (
-        <div className="post-item__alert post-item__alert--error">
+        <motion.div
+          className="post__alert post__alert--error"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
           <AlertCircle size={18} />
           {submitError}
-        </div>
+        </motion.div>
       )}
 
-      <form
-        id="post-item-form"
-        className="post-item__form"
-        onSubmit={handleSubmit}
-        noValidate
-      >
-        <div className="field">
-          <label htmlFor="status" className="field__label">Status do item *</label>
-          <div className="field__radio-group">
-            {STATUS_OPTIONS.map((option) => (
-              <label key={option.value} className="field__radio-label">
-                <input
-                  type="radio"
-                  name="status"
-                  value={option.value}
-                  checked={form.status === option.value}
+      <form className="post__form" onSubmit={handleSubmit} noValidate>
+        {step === 1 && (
+          <motion.div
+            className="post__step-content"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="post__field">
+              <label className="post__label">O que aconteceu? *</label>
+              <div className="post__status-group">
+                {STATUS_OPTIONS.map((option) => (
+                  <label
+                    key={option.value}
+                    className={`post__status-chip ${form.status === option.value ? `post__status-chip--${option.value.toLowerCase()}` : ''}`}
+                  >
+                    <input
+                      type="radio"
+                      name="status"
+                      value={option.value}
+                      checked={form.status === option.value}
+                      onChange={handleChange}
+                      className="sr-only"
+                    />
+                    <span className="post__status-emoji">
+                      {option.value === 'LOST' ? '😔' : '🙌'}
+                    </span>
+                    <div className="post__status-info">
+                      <strong>{option.label}</strong>
+                      <span>{option.desc}</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="post__field">
+              <label className="post__label" htmlFor="location">Onde? *</label>
+              <div className="post__select-wrap">
+                <MapPin size={18} className="post__select-icon" />
+                <select
+                  id="location"
+                  name="location"
+                  className="post__select"
+                  value={form.location}
                   onChange={handleChange}
-                  className="field__radio-input"
+                  required
+                >
+                  <option value="" disabled>Selecione o local...</option>
+                  {LOCATIONS.map((loc) => (
+                    <option key={loc} value={loc}>{loc}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="primary"
+              size="lg"
+              fullWidth
+              onClick={() => setStep(2)}
+              disabled={!form.status || !form.location}
+            >
+              Continuar
+            </Button>
+          </motion.div>
+        )}
+
+        {step === 2 && (
+          <motion.div
+            className="post__step-content"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="post__field">
+              <label className="post__label" htmlFor="title">Título do item *</label>
+              <div className="post__input-wrap">
+                <Tag size={18} className="post__input-icon" />
+                <input
+                  id="title"
+                  name="title"
+                  type="text"
+                  className="post__input"
+                  placeholder="Ex: Carteira de couro marrom"
+                  value={form.title}
+                  onChange={handleChange}
                   required
                 />
-                <span className={`field__radio-chip field__radio-chip--${option.value.toLowerCase()}`}>
-                  {option.label}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+              </div>
+            </div>
 
-        <div className="field">
-          <label htmlFor="title" className="field__label">
-            <Tag size={14} />
-            Título do item *
-          </label>
-          <input
-            id="title"
-            name="title"
-            type="text"
-            className="field__input"
-            placeholder="Ex: Carteira de couro marrom"
-            value={form.title}
-            onChange={handleChange}
-            required
-            disabled={isSubmitting}
-          />
-        </div>
+            <div className="post__field">
+              <label className="post__label" htmlFor="categoryId">Categoria *</label>
+              <div className="post__select-wrap">
+                <FileText size={18} className="post__select-icon" />
+                <select
+                  id="categoryId"
+                  name="categoryId"
+                  className="post__select"
+                  value={form.categoryId}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="" disabled>Selecione a categoria...</option>
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-        <div className="field">
-          <label htmlFor="categoryId" className="field__label">
-            <FileText size={14} />
-            Categoria *
-          </label>
-          {loadingCategories ? (
-            <select id="categoryId" className="field__input" disabled>
-              <option value="">Carregando...</option>
-            </select>
-          ) : categoriesError ? (
-            <select id="categoryId" className="field__input" disabled>
-              <option value="">Erro ao carregar</option>
-            </select>
-          ) : (
-            <select
-              id="categoryId"
-              name="categoryId"
-              className="field__input"
-              value={form.categoryId}
-              onChange={handleChange}
-              required
-              disabled={isSubmitting}
-            >
-              <option value="" disabled>Selecione a categoria...</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
-          )}
-          {categoriesError && (
-            <span className="field__error">{categoriesError}</span>
-          )}
-        </div>
+            <div className="post__field">
+              <label className="post__label" htmlFor="description">Descrição</label>
+              <textarea
+                id="description"
+                name="description"
+                className="post__textarea"
+                placeholder="Descreva o item com detalhes (cor, marca, características...)"
+                rows={3}
+                value={form.description}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="field">
-          <label htmlFor="location" className="field__label">
-            <MapPin size={14} />
-            Local *
-          </label>
-          <select
-            id="location"
-            name="location"
-            className="field__input"
-            value={form.location}
-            onChange={handleChange}
-            required
-            disabled={isSubmitting}
-          >
-            <option value="" disabled>Selecione o local...</option>
-            {LOCATIONS.map((loc) => (
-              <option key={loc} value={loc}>{loc}</option>
-            ))}
-          </select>
-        </div>
+            <div className="post__field">
+              <label className="post__label" htmlFor="imageUrl">Imagem (URL)</label>
+              <div className="post__input-wrap">
+                <Image size={18} className="post__input-icon" />
+                <input
+                  id="imageUrl"
+                  name="imageUrl"
+                  type="url"
+                  className="post__input"
+                  placeholder="https://exemplo.com/foto.jpg"
+                  value={form.imageUrl}
+                  onChange={handleChange}
+                />
+              </div>
+              <span className="post__hint">Cole o link de uma imagem do item (opcional)</span>
+            </div>
 
-        <div className="field">
-          <label htmlFor="description" className="field__label">Descrição</label>
-          <textarea
-            id="description"
-            name="description"
-            className="field__input field__input--textarea"
-            placeholder="Descreva o item com detalhes (cor, marca, características...)"
-            rows={4}
-            value={form.description}
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
-        </div>
-
-        <div className="field">
-          <label htmlFor="imageUrl" className="field__label">
-            <Image size={14} />
-            Imagem (URL)
-          </label>
-          <input
-            id="imageUrl"
-            name="imageUrl"
-            type="url"
-            className="field__input"
-            placeholder="https://exemplo.com/foto.jpg"
-            value={form.imageUrl}
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
-          <span className="field__hint">Cole o link de uma imagem do item (opcional)</span>
-        </div>
-
-        <button
-          id="submit-post-item"
-          type="submit"
-          className="post-item__submit"
-          disabled={isSubmitting || loadingCategories}
-        >
-          {isSubmitting ? 'Publicando...' : 'Publicar item'}
-        </button>
+            <div className="post__actions">
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                fullWidth
+                disabled={isSubmitting || !form.title || !form.categoryId}
+              >
+                {isSubmitting ? 'Publicando...' : 'Publicar item'}
+              </Button>
+            </div>
+          </motion.div>
+        )}
       </form>
-    </section>
+    </motion.div>
   );
 }
