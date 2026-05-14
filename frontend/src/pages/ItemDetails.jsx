@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { MapPin, Tag, User, Calendar, CheckCircle, Mail } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  MapPin, Tag, User, Calendar, CheckCircle,
+  Mail, ChevronLeft, Image as ImageIcon, Shield
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { StatusTag } from '../components/ui/StatusTag';
+import { Button } from '../components/ui/Button';
 import { itemsApi } from '../services/api';
 import './ItemDetails.css';
 
@@ -26,16 +31,11 @@ export function ItemDetails() {
         setLoading(false);
       }
     }
-
     fetchItem();
   }, [id]);
 
   const handleResolve = async () => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-
+    if (!token) { navigate('/login'); return; }
     setResolving(true);
     try {
       await itemsApi.resolve(id);
@@ -55,10 +55,7 @@ export function ItemDetails() {
   };
 
   const handleContact = () => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
+    if (!token) { navigate('/login'); return; }
     if (item.author?.email) {
       window.location.href = `mailto:${item.author.email}?subject=Item: ${item.title}`;
     }
@@ -66,86 +63,141 @@ export function ItemDetails() {
 
   if (loading) {
     return (
-      <section className="item-details">
-        <Link to="/" className="item-details__back">← Voltar</Link>
-        <p>Carregando detalhes...</p>
-      </section>
+      <div className="detail">
+        <div className="detail__loading">
+          <div className="detail__skeleton detail__skeleton--image" />
+          <div className="detail__skeleton detail__skeleton--title" />
+          <div className="detail__skeleton detail__skeleton--text" />
+          <div className="detail__skeleton detail__skeleton--text" />
+          <div className="detail__skeleton detail__skeleton--text" />
+        </div>
+      </div>
     );
   }
 
   if (error || !item) {
     return (
-      <section className="item-details">
-        <p className="item-details__not-found">{error || 'Item não encontrado.'}</p>
-        <Link to="/" className="item-details__back">← Voltar</Link>
-      </section>
+      <div className="detail">
+        <div className="detail__error">
+          <p>{error || 'Item não encontrado.'}</p>
+          <Link to="/" className="detail__back-btn">Voltar ao início</Link>
+        </div>
+      </div>
     );
   }
 
   return (
-    <section className="item-details">
-      <Link to="/" className="item-details__back">← Voltar</Link>
+    <motion.div
+      className="detail"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Back button */}
+      <Link to="/" className="detail__back">
+        <ChevronLeft size={22} />
+        Voltar
+      </Link>
 
-      <div className="item-details__card">
-        <StatusTag status={getStatusTag()} />
-        <h1 className="item-details__title">{item.title}</h1>
-
-        <dl className="item-details__meta">
-          <div className="item-details__meta-row">
-            <dt><MapPin size={16} className="item-details__icon" /> Local</dt>
-            <dd>{item.location}</dd>
+      {/* Image */}
+      <motion.div
+        className="detail__image-wrap"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        {item.imageUrl ? (
+          <img src={item.imageUrl} alt={item.title} className="detail__image" />
+        ) : (
+          <div className="detail__image-placeholder">
+            <ImageIcon size={48} />
           </div>
+        )}
+        <div className="detail__image-status">
+          <StatusTag status={getStatusTag()} />
+        </div>
+      </motion.div>
+
+      {/* Content */}
+      <motion.div
+        className="detail__content"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+      >
+        <h1 className="detail__title">{item.title}</h1>
+
+        <div className="detail__meta">
+          {item.location && (
+            <div className="detail__meta-row">
+              <MapPin size={16} />
+              <span>{item.location}</span>
+            </div>
+          )}
           {item.category && (
-            <div className="item-details__meta-row">
-              <dt><Tag size={16} className="item-details__icon" /> Categoria</dt>
-              <dd>{item.category.name}</dd>
+            <div className="detail__meta-row">
+              <Tag size={16} />
+              <span>{item.category.name}</span>
             </div>
           )}
           {item.author && (
-            <div className="item-details__meta-row">
-              <dt><User size={16} className="item-details__icon" /> Postado por</dt>
-              <dd>{item.author.name}</dd>
+            <div className="detail__meta-row">
+              <User size={16} />
+              <span>Postado por {item.author.name}</span>
             </div>
           )}
-          <div className="item-details__meta-row">
-            <dt><Calendar size={16} className="item-details__icon" /> Data</dt>
-            <dd>{new Date(item.createdAt).toLocaleDateString('pt-BR')}</dd>
+          <div className="detail__meta-row">
+            <Calendar size={16} />
+            <span>{new Date(item.createdAt).toLocaleDateString('pt-BR')}</span>
           </div>
-        </dl>
+        </div>
 
-        <p className="item-details__description">{item.description}</p>
+        {item.description && (
+          <div className="detail__description">
+            <h3>Descrição</h3>
+            <p>{item.description}</p>
+          </div>
+        )}
 
-        <div className="item-details__actions">
+        <div className="detail__actions">
           {!isAuthor && !item.isResolved && (
-            <button 
-              id="contact-owner-btn" 
-              className="item-details__contact"
+            <Button
+              variant="warning"
+              size="lg"
+              fullWidth
+              icon={<Mail size={20} />}
               onClick={handleContact}
             >
-              <Mail size={18} />
-              Entrar em contato
-            </button>
+              Esse item é meu
+            </Button>
           )}
 
           {isAuthor && !item.isResolved && (
-            <button 
-              className="item-details__resolve"
+            <Button
+              variant="success"
+              size="lg"
+              fullWidth
+              icon={<CheckCircle size={20} />}
               onClick={handleResolve}
               disabled={resolving}
             >
-              <CheckCircle size={18} />
               {resolving ? 'Marcando...' : 'Marcar como resolvido'}
-            </button>
+            </Button>
           )}
 
           {item.isResolved && (
-            <div className="item-details__resolved-notice">
-              <CheckCircle size={18} />
-              Este item foi resolvido
+            <div className="detail__resolved">
+              <CheckCircle size={20} />
+              <span>Este item foi resolvido</span>
             </div>
           )}
+
+          <div className="detail__trust">
+            <Shield size={14} />
+            <span>Encontro presencial seguro no campus</span>
+          </div>
         </div>
-      </div>
-    </section>
+      </motion.div>
+    </motion.div>
   );
 }
