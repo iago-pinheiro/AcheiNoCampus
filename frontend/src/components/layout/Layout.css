@@ -2,23 +2,20 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 64px;
+  background: var(--bg);
 }
 
-.main-container {
+.main-content {
   flex: 1;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: calc(var(--bottom-nav-height) + 16px);
 }
 
-@media (min-width: 640px) {
-  .app-shell {
-    padding-bottom: 0;
-  }
-
-  .bottom-nav {
-    display: none;
+@media (min-width: 768px) {
+  .main-content {
+    padding-bottom: 32px;
+    padding-top: calc(var(--header-height) + 16px);
   }
 }
