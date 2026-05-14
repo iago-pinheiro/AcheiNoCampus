@@ -9,28 +9,31 @@ import { Login } from './pages/Login';
 import { Cadastro } from './pages/Cadastro';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="itens" element={<AllItems />} />
-            <Route path="item/:id" element={<ItemDetails />} />
-            <Route path="login" element={<Login />} />
-            <Route path="cadastro" element={<Cadastro />} />
-            
-            {/* Rotas Protegidas */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="postar" element={<PostItem />} />
-              <Route path="perfil" element={<Profile />} />
+    <ErrorBoundary>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="itens" element={<AllItems />} />
+              <Route path="item/:id" element={<ItemDetails />} />
+              <Route path="login" element={<Login />} />
+              <Route path="cadastro" element={<Cadastro />} />
+              
+              {/* Rotas Protegidas */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="postar" element={<PostItem />} />
+                <Route path="perfil" element={<Profile />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-      </Router>
-    </AuthProvider>
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
