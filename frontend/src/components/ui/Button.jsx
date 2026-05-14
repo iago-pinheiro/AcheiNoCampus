@@ -1,32 +1,34 @@
+import { motion } from 'framer-motion';
 import './Button.css';
 
-/**
- * Reusable Button Component
- * @param {string} variant - primary | secondary | success | warning
- * @param {boolean} fullWidth - Se true, o botão ocupa 100% da largura
- * @param {React.ReactNode} icon - Ícone (Lucide) opcional
- */
 export function Button({
   children,
   variant = 'primary',
+  size = 'md',
   fullWidth = false,
   icon,
   className = '',
   disabled,
   ...props
 }) {
-  const baseClass = 'btn';
-  const variantClass = `btn--${variant}`;
-  const widthClass = fullWidth ? 'btn--fullWidth' : '';
+  const classes = [
+    'btn',
+    `btn--${variant}`,
+    `btn--${size}`,
+    fullWidth ? 'btn--full' : '',
+    className
+  ].filter(Boolean).join(' ');
 
   return (
-    <button
-      className={`${baseClass} ${variantClass} ${widthClass} ${className}`.trim()}
+    <motion.button
+      className={classes}
       disabled={disabled}
+      whileHover={disabled ? {} : { scale: 1.02 }}
+      whileTap={disabled ? {} : { scale: 0.98 }}
       {...props}
     >
       {icon && <span className="btn__icon">{icon}</span>}
       {children}
-    </button>
+    </motion.button>
   );
 }

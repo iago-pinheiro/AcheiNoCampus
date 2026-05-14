@@ -1,51 +1,55 @@
 import { MapPin, Calendar, Image as ImageIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { StatusTag } from './StatusTag';
 import './CardItem.css';
 
-/**
- * CardItem Component
- */
 export function CardItem({
   title,
   imageUrl,
   location,
   date,
   status = 'pending',
+  onClick,
   className = ''
 }) {
   return (
-    <article className={`card-item ${className}`}>
-      <div className="card-item__image-wrapper">
+    <motion.article
+      className={`card ${className}`}
+      whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(15, 23, 42, 0.1)' }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+    >
+      <div className="card__image-wrap">
         {imageUrl ? (
-          <img src={imageUrl} alt={title} className="card-item__image" />
+          <img src={imageUrl} alt={title} className="card__image" loading="lazy" />
         ) : (
-          <div className="card-item__placeholder-image">
-            <ImageIcon size={32} />
+          <div className="card__placeholder">
+            <ImageIcon size={28} />
           </div>
         )}
-      </div>
-      
-      <div className="card-item__content">
-        <div className="card-item__header">
-          <h3 className="card-item__title">{title}</h3>
+        <div className="card__status">
           <StatusTag status={status} />
         </div>
-        
-        <div className="card-item__details">
+      </div>
+
+      <div className="card__body">
+        <h3 className="card__title">{title}</h3>
+
+        <div className="card__meta">
           {location && (
-            <div className="card-item__detail-row">
-              <MapPin size={14} className="card-item__icon" />
-              <span>{location}</span>
-            </div>
+            <span className="card__meta-item">
+              <MapPin size={13} />
+              {location}
+            </span>
           )}
           {date && (
-            <div className="card-item__detail-row">
-              <Calendar size={14} className="card-item__icon" />
-              <span>{date}</span>
-            </div>
+            <span className="card__meta-item">
+              <Calendar size={13} />
+              {date}
+            </span>
           )}
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }

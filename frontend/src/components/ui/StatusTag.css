@@ -1,36 +1,36 @@
-.status-tag {
+.tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 4px;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.6875rem;
-  padding: 0.3125rem 0.75rem;
+  font-size: 0.625rem;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
-.status-tag--found {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary-blue);
-  border: 1px solid rgba(37, 83, 235, 0.2);
+.tag--found {
+  background: rgba(16, 153, 129, 0.1);
+  color: var(--soft-green);
+  border: 1px solid rgba(16, 153, 129, 0.2);
 }
 
-.status-tag--claimed {
-  background-color: var(--color-green-light);
-  color: var(--color-soft-green);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+.tag--claimed {
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--vibrant-purple);
+  border: 1px solid rgba(168, 85, 247, 0.2);
 }
 
-.status-tag--pending {
-  background-color: var(--color-orange-light);
-  color: var(--color-bright-orange);
+.tag--pending {
+  background: rgba(249, 115, 22, 0.1);
+  color: var(--bright-orange);
   border: 1px solid rgba(249, 115, 22, 0.2);
 }
 
-.status-tag--resolved {
-  background-color: var(--color-purple-light);
-  color: var(--color-vibrant-purple);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+.tag--resolved {
+  background: rgba(37, 83, 235, 0.1);
+  color: var(--primary-blue);
+  border: 1px solid rgba(37, 83, 235, 0.2);
 }

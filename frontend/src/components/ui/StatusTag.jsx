@@ -1,22 +1,24 @@
+import { motion } from 'framer-motion';
 import './StatusTag.css';
 
-/**
- * StatusTag Component
- * Variantes: found | claimed | pending | resolved
- */
 export function StatusTag({ status, className = '' }) {
   const statusMap = {
-    found: { label: 'Encontrado', class: 'status-tag--found' },
-    claimed: { label: 'Reivindicado', class: 'status-tag--claimed' },
-    pending: { label: 'Pendente', class: 'status-tag--pending' },
-    resolved: { label: 'Resolvido', class: 'status-tag--resolved' }
+    found: { label: 'Encontrado', class: 'tag--found' },
+    claimed: { label: 'Reivindicado', class: 'tag--claimed' },
+    pending: { label: 'Pendente', class: 'tag--pending' },
+    resolved: { label: 'Resolvido', class: 'tag--resolved' }
   };
 
   const current = statusMap[status] || statusMap.pending;
 
   return (
-    <span className={`status-tag ${current.class} ${className}`}>
+    <motion.span
+      className={`tag ${current.class} ${className}`}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.15 }}
+    >
       {current.label}
-    </span>
+    </motion.span>
   );
 }
